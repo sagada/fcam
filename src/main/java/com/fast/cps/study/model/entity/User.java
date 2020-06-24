@@ -2,11 +2,9 @@ package com.fast.cps.study.model.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
+@ToString(exclude = "orderDetails")
 public class User {
 
     @Id
@@ -26,4 +25,8 @@ public class User {
     private String createdBy;
     private LocalDateTime updatedAt;
     private String updatedBy;
+
+    // 1 : N
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<OrderDetail> orderDetails; //order_detail_id
 }

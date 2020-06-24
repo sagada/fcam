@@ -1,18 +1,26 @@
 package com.fast.cps.study.repository;
 
-
 import com.fast.cps.study.FastcampusApplicationTests;
 import com.fast.cps.study.model.entity.User;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.time.LocalDateTime;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-public class UserRepositoryTest extends FastcampusApplicationTests {
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
 
     @Test
+    @Transactional
     public void create()
     {
         User user = new User();
@@ -27,21 +35,33 @@ public class UserRepositoryTest extends FastcampusApplicationTests {
     }
 
     @Test
+    @Transactional
     public void read()
     {
         Long findId = 1L;
         userRepository
                     .findById(findId)
                     .ifPresent(selectedUser -> {
-                        System.out.println(selectedUser.getEmail());
-                        selectedUser.setEmail("최강창민");
-                        userRepository.save(selectedUser);
+                       selectedUser.getOrderDetails().forEach(order->{
+                           System.out.println(order.getItem());
+                       });
                     });
 
+    }
+
+    @Test
+    @Transactional
+    public void delete()
+    {
+        Long findId = 3L;
+        Optional<User> user = userRepository.findById(findId);
+
         userRepository
-                    .findById(findId)
-                    .ifPresent(selectedUser -> {
-                        System.out.println(selectedUser.getEmail());
-                    });
+                .findById(findId)
+                .ifPresent(selectedUser -> {
+                    userRepository.deleteById(findId);
+                });
+
+        userRepository.findById(findId).orElseThrow(()-> new IllegalArgumentException("없어 유저가..."));
     }
 }
