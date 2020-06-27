@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString(exclude = "orderDetails")
 public class Item {
 
     @Id
@@ -25,6 +24,8 @@ public class Item {
     private String content;
     private Integer price;
     private String brandName;
+
+    private Long partnerId;
 
     private LocalDateTime registeredAt;
     private LocalDateTime unregisteredAt;

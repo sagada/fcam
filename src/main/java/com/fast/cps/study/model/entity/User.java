@@ -4,15 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-@ToString(exclude = "orderDetails")
 public class User {
 
     @Id

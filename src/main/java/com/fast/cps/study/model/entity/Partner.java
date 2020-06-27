@@ -20,6 +20,8 @@ public class Partner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long categoryId;
+
     private String name;
     private String status;
     private String address;

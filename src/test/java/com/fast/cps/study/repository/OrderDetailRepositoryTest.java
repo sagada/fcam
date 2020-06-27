@@ -1,6 +1,7 @@
 package com.fast.cps.study.repository;
 
 import com.fast.cps.study.model.entity.OrderDetail;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,19 +21,23 @@ public class OrderDetailRepositoryTest {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+
 
     @Test
-    @Transactional
     public void create() throws Exception
     {
         OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setArrivalDate(LocalDateTime.now().plusDays(2));
 
-        orderDetail.setOrderAt(LocalDateTime.now());
+        orderDetail.setStatus("WAITING");
+        orderDetail.setQuantity(1);
+        orderDetail.setOrderGroupId(1L); //어떠한 장바구니에
+        orderDetail.setItemId(1L); //어떤 상품
+        orderDetail.setTotalPrice(BigDecimal.valueOf(9000000));
+        orderDetail.setCreatedBy("AdminServer");
+        orderDetail.setCreatedAt(LocalDateTime.now());
         OrderDetail orderDetail1 = orderDetailRepository.save(orderDetail);
+        Assert.assertNotNull(orderDetail1);
     }
-
-
 
 }

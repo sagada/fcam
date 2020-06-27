@@ -2,6 +2,7 @@ package com.fast.cps.study.repository;
 
 
 import com.fast.cps.study.model.entity.Item;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,29 +22,28 @@ public class ItemRepositoryTest {
     private ItemRepository itemRepository;
 
     @Test
-    @Transactional
     public void create()
     {
         //given
-        String name = "노트북";
-        String content = "노트북 특가!";
-        int price = 100000;
-
         Item item = new Item();
-        item.setName(name);
-        item.setPrice(price);
-        item.setContent(content);
+        item.setStatus("UNREGISTERED");
+        item.setName("노트북");
+        item.setTitle("삼성 노트북 A100");
+        item.setContent("2019년형 노트북 입니다.");
+        item.setPrice(900000);
+        item.setBrandName("삼성");
+        item.setCreatedAt(LocalDateTime.now());
+        item.setCreatedBy("Partner01");
+        item.setRegisteredAt(LocalDateTime.now());
+        item.setPartnerId(1L);
         Item newItem = itemRepository.save(item);
-        assertThat(newItem.getName()).isEqualTo(name);
+        Assert.assertNotNull(newItem);
+
     }
 
     @Test
     public void read()
     {
-        Long id = 1L;
-        Item item = itemRepository.findById(id).orElseThrow(()->
-                new IllegalArgumentException("id : 1 없어"));
-        System.out.println(item);
-        assertThat(item.getId()).isEqualTo(id);
+
     }
 }

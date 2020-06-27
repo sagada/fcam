@@ -2,6 +2,7 @@ package com.fast.cps.study.repository;
 
 import com.fast.cps.study.FastcampusApplicationTests;
 import com.fast.cps.study.model.entity.User;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,52 +24,40 @@ public class UserRepositoryTest {
     @Transactional
     public void create()
     {
-        User user = new User();
-        user.setAccount("account1");
-        user.setEmail("email1");
-        user.setPhoneNumber("010-1234-1234");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("admin");
-        User newUser =  userRepository.save(user);
+        String account = "TEST01";
+        String password = "TEST01";
 
-        System.out.println(newUser.getId());
+        String status = "REGISTERED";
+        String email = "Test01@naver.com";
+        String phoneNumber = "010-0123-1234";
+
+        LocalDateTime registeredAt = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
+        String createdBy = "AdminUser";
+
+        User user = new User();
+        user.setAccount(account);
+        user.setEmail(email);
+        user.setCreatedBy(createdBy);
+        user.setPhoneNumber(phoneNumber);
+        user.setRegisteredAt(registeredAt);
+        user.setCreatedAt(createdAt);
+        user.setStatus(status);
+        user.setPassword(password);
+
+        User newUser = userRepository.save(user);
+        Assert.assertNotNull(newUser);
+
     }
 
     @Test
     public void read()
     {
-
-        // select * from user where id =
-
-        String findAccount = "account1";
-        Optional<User> user = userRepository.findByAccount(findAccount);
-        user.ifPresent(seletedUser -> {
-            seletedUser.getOrderDetails().stream().forEach(detail->{
-                System.out.println(detail.getItem());
-            });
-
-        });
+        String phoneNumber = "010-0123-1234";
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc(phoneNumber);
+        Assert.assertNotNull(user);
+        System.out.println(user);
     }
 
-    @Test
-    public void find_아이디와_계정이름_read()
-    {
 
-    }
-
-    @Test
-    @Transactional
-    public void delete()
-    {
-        Long findId = 3L;
-        Optional<User> user = userRepository.findById(findId);
-
-        userRepository
-                .findById(findId)
-                .ifPresent(selectedUser -> {
-                    userRepository.deleteById(findId);
-                });
-
-        userRepository.findById(findId).orElseThrow(()-> new IllegalArgumentException("없어 유저가..."));
-    }
 }
