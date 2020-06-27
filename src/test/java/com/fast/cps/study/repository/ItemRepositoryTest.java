@@ -42,7 +42,7 @@ public class ItemRepositoryTest {
         Long id = 1L;
         Item item = itemRepository.findById(id).orElseThrow(()->
                 new IllegalArgumentException("id : 1 없어"));
-
+        System.out.println(item);
         assertThat(item.getId()).isEqualTo(id);
     }
 }

@@ -35,17 +35,24 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void read()
     {
-        Long findId = 1L;
-        userRepository
-                    .findById(findId)
-                    .ifPresent(selectedUser -> {
-                       selectedUser.getOrderDetails().forEach(order->{
-                           System.out.println(order.getItem());
-                       });
-                    });
+
+        // select * from user where id =
+
+        String findAccount = "account1";
+        Optional<User> user = userRepository.findByAccount(findAccount);
+        user.ifPresent(seletedUser -> {
+            seletedUser.getOrderDetails().stream().forEach(detail->{
+                System.out.println(detail.getItem());
+            });
+
+        });
+    }
+
+    @Test
+    public void find_아이디와_계정이름_read()
+    {
 
     }
 

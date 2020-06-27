@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,10 +19,20 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String status;
     private String name;
-    private Integer price;
+    private String title;
     private String content;
+    private Integer price;
+    private String brandName;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
-    private List<OrderDetail> orderDetails;
+    private LocalDateTime registeredAt;
+    private LocalDateTime unregisteredAt;
+
+    private LocalDateTime createdAt;
+    private String createdBy;
+
+    private LocalDateTime updatedAt;
+    private String updatedBy;
+
 }
