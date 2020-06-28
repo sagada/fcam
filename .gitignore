@@ -2,3 +2,10 @@ HELP.md
 .gradle
 .idea
 src/main/resources/application.properties
+build/generated/
+build/resources/main/static/
+build/resources/main/templates/
+build/tmp/
+src/main/resources/static/
+src/main/resources/templates/
+src/test/java/com/fast/cps/study/controller/
