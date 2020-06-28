@@ -19,6 +19,7 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
+    @Transactional
     public void create()
     {
         String account = "TEST02";
@@ -49,6 +50,7 @@ public class UserRepositoryTest {
     {
         String phoneNumber = "010-0123-1234";
         User user = userRepository.findFirstByPhoneNumberOrderByIdDesc(phoneNumber);
+
         user.getOrderGroupList().stream().forEach(orderGroup -> {
             System.out.println("-------------주문 묶음--------------");
             System.out.println("수령인 : " + orderGroup.getRevName());
