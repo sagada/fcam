@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -31,8 +29,8 @@ public class OrderDetailRepositoryTest {
 
         orderDetail.setStatus("WAITING");
         orderDetail.setQuantity(1);
-        orderDetail.setOrderGroupId(1L); //어떠한 장바구니에
-        orderDetail.setItemId(1L); //어떤 상품
+//        orderDetail.setOrderGroupId(1L); //어떠한 장바구니에
+//        orderDetail.setItemId(1L); //어떤 상품
         orderDetail.setTotalPrice(BigDecimal.valueOf(9000000));
         orderDetail.setCreatedBy("AdminServer");
         orderDetail.setCreatedAt(LocalDateTime.now());

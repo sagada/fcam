@@ -9,11 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,7 +32,7 @@ public class ItemRepositoryTest {
         item.setCreatedAt(LocalDateTime.now());
         item.setCreatedBy("Partner01");
         item.setRegisteredAt(LocalDateTime.now());
-        item.setPartnerId(1L);
+//        item.setPartnerId(1L);
         Item newItem = itemRepository.save(item);
         Assert.assertNotNull(newItem);
 

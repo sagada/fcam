@@ -42,7 +42,7 @@ public class PartnerRepositoryTest extends FastcampusApplicationTests {
         partner.setRegisteredAt(registeredAt);
 
         //임시 카테고리 ID
-        partner.setCategoryId(1L);
+//        partner.setCategoryId(1L);
 
         Partner newPartner = partnerRepository.save(partner);
         Assert.assertNotNull(newPartner);

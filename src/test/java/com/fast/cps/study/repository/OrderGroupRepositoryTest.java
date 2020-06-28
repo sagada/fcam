@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 public class OrderGroupRepositoryTest extends FastcampusApplicationTests {
@@ -13,17 +14,24 @@ public class OrderGroupRepositoryTest extends FastcampusApplicationTests {
     private OrderGroupRepository orderGroupRepository;
 
     @Test
+    @Transactional
     public void create()
     {
         OrderGroup orderGroup = new OrderGroup();
         orderGroup.setCreatedBy("AdminServer");
-        orderGroup.setCreatedAt(LocalDateTime.now());
+        orderGroup.setCreatedAt(LocalDateTime.now())  ;
         orderGroup.setTotalQuantity(1);
-        orderGroup.setUserId(1L);
+//        orderGroup.setUserId(1L); //외래키
         orderGroup.setOrderType("즉시");
         orderGroup.setStatus("DELIVERING");
         OrderGroup newOrderGroup = orderGroupRepository.save(orderGroup);
         Assert.assertNotNull(newOrderGroup);
+    }
+
+    @Test
+    public void read()
+    {
+
     }
 
 }
