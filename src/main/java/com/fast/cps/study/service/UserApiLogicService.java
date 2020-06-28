@@ -10,12 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserApiLogicService implements CrudInterface<UserApiRequest, UserApiResponse> {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserApiLogicService(UserRepository userRepository)
+    {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public Header<UserApiResponse> create(Header<UserApiRequest> request) {
@@ -35,23 +41,59 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
         User newUser = userRepository.save(user);
 
-        //3. newUser -> userApiResponse return
+        //3. newUser -> userApiResponse Return
         return response(newUser);
     }
 
     @Override
-    public Header<UserApiResponse> read(Long id) {
-        return null;
+    public Header<UserApiResponse> read(Long id)
+    {
+        return userRepository.findById(id)
+                .map(this::response)
+                .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
     @Override
-    public Header<UserApiResponse> update(Header<UserApiRequest> requset) {
-        return null;
+    public Header<UserApiResponse> update(Header<UserApiRequest> requset)
+    {
+        // 1.data
+        UserApiRequest userApiRequest = requset.getData();
+
+        // 2.id ->user
+        Optional<User> optionalUser = userRepository.findById(userApiRequest.getId());
+
+        return optionalUser.map(user->{
+                    // 3. update
+                    user.setAccount(userApiRequest.getAccount())
+                            .setPassword(userApiRequest.getPassword())
+                            .setStatus(userApiRequest.getStatus())
+                            .setPhoneNumber(userApiRequest.getPhoneNumber())
+                            .setEmail(userApiRequest.getEmail())
+                            .setRegisteredAt(userApiRequest.getRegisteredAt())
+                            .setUnregisteredAt(userApiRequest.getUnRegisteredAt());
+
+                    return user;
+                    // 4.userApiResponse
+
+                })
+                .map(user->userRepository.save(user)) // update
+                .map(this::response)  // make userApiResponse
+                .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
     @Override
-    public Header<UserApiResponse> delete(Long id) {
-        return null;
+    public Header delete(Long id) {
+
+        //id -> repository -> user
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        // repository -> delete
+        return optionalUser.map(user->{
+                        userRepository.delete(user);
+                        return Header.OK();
+                })
+                .orElseGet(()->Header.ERROR("유저 없음"));
+
     }
 
     // 1.request data

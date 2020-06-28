@@ -5,35 +5,50 @@ import com.fast.cps.study.model.network.Header;
 import com.fast.cps.study.model.network.request.UserApiRequest;
 import com.fast.cps.study.model.network.response.UserApiResponse;
 import com.fast.cps.study.service.UserApiLogicService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/user")
 public class UserApiController implements CrudInterface<UserApiRequest, UserApiResponse> {
 
-    @Autowired
-    private UserApiLogicService userApiLogicService;
+    private final UserApiLogicService userApiLogicService;
 
+    @Autowired
+    public UserApiController(UserApiLogicService userApiLogicService)
+    {
+        this.userApiLogicService = userApiLogicService;
+    }
 
     @Override
     @PostMapping
-    public Header<UserApiResponse> create(Header<UserApiRequest> request) {
+    public Header<UserApiResponse> create(@RequestBody Header<UserApiRequest> request)
+    {
+        log.info("{}",  request);
         return userApiLogicService.create(request);
     }
 
     @Override
-    public Header<UserApiResponse> read(Long id) {
-        return null;
+    @GetMapping("/{id}")
+    public Header<UserApiResponse> read(@PathVariable(value = "id") Long id)
+    {
+        log.info("{}", id);
+        return userApiLogicService.read(id);
     }
 
     @Override
-    public Header<UserApiResponse> update(Header<UserApiRequest> requset) {
-        return null;
+    @PutMapping
+    public Header<UserApiResponse> update(@RequestBody Header<UserApiRequest> requset)
+    {
+        return userApiLogicService.update(requset);
     }
 
     @Override
-    public Header<UserApiResponse> delete(Long id) {
-        return null;
+    @DeleteMapping("/{id}")
+    public Header delete(@PathVariable(value = "id") Long id)
+    {
+        return userApiLogicService.delete(id);
     }
 }
