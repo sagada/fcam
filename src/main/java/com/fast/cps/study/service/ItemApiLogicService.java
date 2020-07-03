@@ -10,7 +10,6 @@ import com.fast.cps.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 
 @Service
@@ -42,6 +41,14 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
         return response(newItem);
     }
 
+
+    @Override
+    public Header<ItemApiResponse> read(Long id) {
+        return itemRepository.findById(id)
+                .map(this::response)
+                .orElseGet(()-> Header.ERROR("데이터가 없습니다."));
+    }
+
     private Header<ItemApiResponse> response(Item item)
     {
         ItemApiResponse body = ItemApiResponse.builder()
@@ -60,20 +67,37 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     }
 
     @Override
-    public Header<ItemApiResponse> read(Long id) {
-        Optional<Item> item = itemRepository.findById(id);
-        item.orElseThrow(()->new IllegalArgumentException("없는 ID 입니다."));
-
-        return response(item.get());
-    }
-
-    @Override
     public Header<ItemApiResponse> update(Header<ItemApiRequest> requset) {
-        return null;
+        ItemApiRequest body = requset.getData();
+        System.out.println(body.getName());
+        System.out.println("body.getId() : " +  body.getId());
+        return itemRepository.findById(body.getId())
+                .map(entityItem ->
+                {
+                    entityItem
+                            .setBrandName(body.getBrandName())
+                            .setContent(body.getContent())
+                            .setTitle(body.getTitle())
+                            .setName(body.getName())
+                            .setStatus(body.getStatus())
+                            .setPrice(body.getPrice())
+                            .setUnregisteredAt(body.getUnregisteredAt())
+                            .setRegisteredAt(body.getRegisteredAt());
+
+                    return entityItem;
+                })
+                .map(newEntityItem -> itemRepository.save(newEntityItem))
+                .map(this::response)
+                .orElseGet(()-> Header.ERROR("데이터 없음"));
     }
 
     @Override
-    public Header<ItemApiResponse> delete(Long id) {
-        return null;
+    public Header delete(Long id) {
+        return itemRepository.findById(id)
+                .map(item -> {
+                    itemRepository.delete(item);
+                    return Header.OK();
+                })
+                .orElseGet(()-> Header.ERROR("삭제할 아이템 아이디가 없습니다."));
     }
 }
