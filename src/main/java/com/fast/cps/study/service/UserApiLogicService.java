@@ -5,10 +5,14 @@ import com.fast.cps.study.model.enumclass.UserStatus;
 import com.fast.cps.study.model.network.Header;
 import com.fast.cps.study.model.network.request.UserApiRequest;
 import com.fast.cps.study.model.network.response.UserApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
@@ -108,4 +112,32 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 
     }
 
+    private UserApiResponse responsePage(User user)
+    {
+        // user -> userApiResponse
+        UserApiResponse userApiResponse = UserApiResponse.builder()
+                .id(user.getId())
+                .account(user.getAccount())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .status(user.getStatus())
+                .registeredAt(user.getRegisteredAt())
+                .unRegisteredAt(user.getUnregisteredAt())
+                .build();
+
+        return userApiResponse;
+
+    }
+
+    public Header<List<UserApiResponse>> search(Pageable pageable)
+    {
+        Page<User> users = baseRepository.findAll(pageable);
+
+        List<UserApiResponse> userApiResponses = users.stream()
+                .map(this::responsePage)
+                .collect(Collectors.toList());
+
+        return Header.OK(userApiResponses);
+    }
 }
