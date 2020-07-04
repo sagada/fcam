@@ -1,6 +1,7 @@
 package com.fast.cps.study.repository;
 
 import com.fast.cps.study.model.entity.User;
+import com.fast.cps.study.model.enumclass.UserStatus;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ public class UserRepositoryTest {
         String account = "TEST02";
         String password = "TEST02";
 
-        String status = "REGISTERED";
+
         String email = "Test02@naver.com";
         String phoneNumber = "010-0123-0234";
 
@@ -36,7 +37,7 @@ public class UserRepositoryTest {
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .registeredAt(registeredAt)
-                .status(status)
+                .status(UserStatus.REGISTERED)
                 .password(password)
                 .build();
 

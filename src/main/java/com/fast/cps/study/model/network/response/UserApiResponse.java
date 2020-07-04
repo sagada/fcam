@@ -1,5 +1,6 @@
 package com.fast.cps.study.model.network.response;
 
+import com.fast.cps.study.model.enumclass.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class UserApiResponse {
     private String password;
     private String email;
     private String phoneNumber;
-    private String status;
+    private UserStatus status;
     private LocalDateTime registeredAt;
     private LocalDateTime unRegisteredAt;
 
