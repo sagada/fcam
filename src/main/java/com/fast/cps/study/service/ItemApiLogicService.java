@@ -10,8 +10,6 @@ import com.fast.cps.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
 public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemApiResponse> {
 
@@ -69,8 +67,6 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     @Override
     public Header<ItemApiResponse> update(Header<ItemApiRequest> requset) {
         ItemApiRequest body = requset.getData();
-        System.out.println(body.getName());
-        System.out.println("body.getId() : " +  body.getId());
         return itemRepository.findById(body.getId())
                 .map(entityItem ->
                 {
