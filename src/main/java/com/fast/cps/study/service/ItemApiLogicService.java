@@ -1,23 +1,18 @@
 package com.fast.cps.study.service;
 
-import com.fast.cps.study.ifs.CrudInterface;
 import com.fast.cps.study.model.entity.Item;
 import com.fast.cps.study.model.network.Header;
 import com.fast.cps.study.model.network.request.ItemApiRequest;
 import com.fast.cps.study.model.network.response.ItemApiResponse;
-import com.fast.cps.study.repository.ItemRepository;
 import com.fast.cps.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemApiResponse> {
+public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResponse, Item> {
 
     @Autowired
     private PartnerRepository partnerRepository;
-
-    @Autowired
-    private ItemRepository itemRepository;
 
     @Override
     public Header<ItemApiResponse> create(Header<ItemApiRequest> request) {
@@ -35,14 +30,14 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .brandName(body.getName())
                 .build();
 
-        Item newItem = itemRepository.save(item);
+        Item newItem = baseRepository.save(item);
         return response(newItem);
     }
 
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
-        return itemRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(this::response)
                 .orElseGet(()-> Header.ERROR("데이터가 없습니다."));
     }
@@ -67,7 +62,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     @Override
     public Header<ItemApiResponse> update(Header<ItemApiRequest> requset) {
         ItemApiRequest body = requset.getData();
-        return itemRepository.findById(body.getId())
+        return baseRepository.findById(body.getId())
                 .map(entityItem ->
                 {
                     entityItem
@@ -82,16 +77,16 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
                     return entityItem;
                 })
-                .map(newEntityItem -> itemRepository.save(newEntityItem))
+                .map(newEntityItem -> baseRepository.save(newEntityItem))
                 .map(this::response)
                 .orElseGet(()-> Header.ERROR("데이터 없음"));
     }
 
     @Override
     public Header delete(Long id) {
-        return itemRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(item -> {
-                    itemRepository.delete(item);
+                    baseRepository.delete(item);
                     return Header.OK();
                 })
                 .orElseGet(()-> Header.ERROR("삭제할 아이템 아이디가 없습니다."));

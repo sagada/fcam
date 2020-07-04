@@ -1,21 +1,16 @@
 package com.fast.cps.study.service;
 
-import com.fast.cps.study.ifs.CrudInterface;
 import com.fast.cps.study.model.entity.OrderGroup;
 import com.fast.cps.study.model.network.Header;
 import com.fast.cps.study.model.network.request.OrderGroupApiRequest;
 import com.fast.cps.study.model.network.response.OrderGroupApiResponse;
-import com.fast.cps.study.repository.OrderGroupRepository;
 import com.fast.cps.study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiRequest, OrderGroupApiResponse> {
-
-    @Autowired
-    private OrderGroupRepository orderGroupRepository;
+public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest, OrderGroupApiResponse, OrderGroup> {
 
     @Autowired
     private UserRepository userRepository;
@@ -36,14 +31,14 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                 .user(userRepository.getOne(body.getUserId()))
                 .build();
 
-        OrderGroup newOrderGroup = orderGroupRepository.save(orderGroup);
+        OrderGroup newOrderGroup = baseRepository.save(orderGroup);
 
         return response(newOrderGroup);
     }
 
     @Override
     public Header<OrderGroupApiResponse> read(Long id) {
-        return orderGroupRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(this::response)
                 .orElseGet(()->Header.ERROR("해당 주문 내역이 없습니다."));
     }
@@ -52,7 +47,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
     public Header<OrderGroupApiResponse> update(Header<OrderGroupApiRequest> requset)
     {
         OrderGroupApiRequest body = requset.getData();
-        return orderGroupRepository.findById(body.getId())
+        return baseRepository.findById(body.getId())
                 .map(
                         entity-> entity
                                     .setStatus(body.getStatus())
@@ -64,16 +59,16 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                                     .setTotalQuantity(body.getTotalQuantity())
                                     .setTotalPrice(body.getTotalPrice())
                                     .setPaymentType(body.getPaymentType()))
-                .map(changeOrderGroup -> orderGroupRepository.save(changeOrderGroup))
+                .map(changeOrderGroup -> baseRepository.save(changeOrderGroup))
                 .map(this::response)
                 .orElseGet(()->Header.ERROR("주문 내역이 없습니다."));
     }
 
     @Override
     public Header delete(Long id) {
-            return orderGroupRepository.findById(id)
+            return baseRepository.findById(id)
                     .map(orderGroup -> {
-                        orderGroupRepository.delete(orderGroup);
+                        baseRepository.delete(orderGroup);
                         return Header.OK();
                     })
                     .orElseGet(()-> Header.ERROR("데이터 없음"));
