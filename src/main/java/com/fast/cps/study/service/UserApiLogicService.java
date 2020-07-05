@@ -3,6 +3,7 @@ package com.fast.cps.study.service;
 import com.fast.cps.study.model.entity.User;
 import com.fast.cps.study.model.enumclass.UserStatus;
 import com.fast.cps.study.model.network.Header;
+import com.fast.cps.study.model.network.Pagination;
 import com.fast.cps.study.model.network.request.UserApiRequest;
 import com.fast.cps.study.model.network.response.UserApiResponse;
 import org.springframework.data.domain.Page;
@@ -138,6 +139,13 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .map(this::responsePage)
                 .collect(Collectors.toList());
 
-        return Header.OK(userApiResponses);
+        Pagination pagination = Pagination.builder()
+                    .totalPages(users.getTotalPages())
+                    .totalElements(users.getTotalElements())
+                    .currentPage(users.getNumber())
+                    .currentElements(users.getNumberOfElements())
+                    .build();
+
+        return Header.OK(userApiResponses, pagination);
     }
 }

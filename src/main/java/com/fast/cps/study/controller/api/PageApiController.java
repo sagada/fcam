@@ -27,7 +27,7 @@ public class PageApiController {
     private UserApiLogicService userApiLogicService;
     @GetMapping
     public Header<List<UserApiResponse>> search(
-            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = 15) Pageable pageable)
+            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = 10) Pageable pageable)
     {
         log.info("{}", pageable);
         return userApiLogicService.search(pageable);
