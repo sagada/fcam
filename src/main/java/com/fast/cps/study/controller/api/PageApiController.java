@@ -2,6 +2,7 @@ package com.fast.cps.study.controller.api;
 
 import com.fast.cps.study.model.network.Header;
 import com.fast.cps.study.model.network.response.UserApiResponse;
+import com.fast.cps.study.model.network.response.UserOrderInfoResponse;
 import com.fast.cps.study.repository.UserRepository;
 import com.fast.cps.study.service.UserApiLogicService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,5 +33,11 @@ public class PageApiController {
     {
         log.info("{}", pageable);
         return userApiLogicService.search(pageable);
+    }
+
+    @GetMapping("/{id}/orderInfo")
+    public Header<UserOrderInfoResponse> orderInfo(@PathVariable Long id)
+    {
+        return userApiLogicService.orderInfo(id);
     }
 }
